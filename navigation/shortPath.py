@@ -102,14 +102,3 @@ def astar(start, end, obstacles):
                     heapq.heappush(open_set, neighbor)
 
     return None
-
-fire_station = (0, 0)
-destination = (3, 3)
-obstacles = {(2, 2), (1, 2)}
-
-path = astar(fire_station, destination, obstacles)
-
-if path:
-    print("Shortest path: ", path)
-else:
-    print("No path found")
