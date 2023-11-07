@@ -52,13 +52,18 @@ def compute_shortest_path(coordinates):
     paths = []
     start=FIRE_STATION
     for i in range(len(coordinates)+1):
-        end= coordinates[i]
+        if(i == (len(coordinates))):
+           end=FIRE_STATION
+        else:
+            end= coordinates[i]
         obstacles= []
         for j in range(len(coordinates)):
             temp= coordinates[j]
             if not(temp==end) and not (temp==start):
                 obstacles.append(temp)
-        paths.append(astar(start, end, obstacles))
+        added=(astar(start, end, obstacles))
+        for element in added:
+            paths.append(element)
         start = paths[-1]
         # if i == 0:
         #     start = FIRE_STATION
