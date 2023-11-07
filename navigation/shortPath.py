@@ -1,7 +1,26 @@
-import heapq;
+import heapq
 
 class Node:
+    """
+    Represents a node in the A* search algorithm.
+
+    Attributes:
+        x (int): X-coordinate of the node.
+        y (int): Y-coordinate of the node.
+        parent (Node): Parent node in the search tree.
+        g (float): Cost from the start node to this node.
+        h (float): Heuristic (Manhattan distance) from this node to the goal.
+        f (float): Total cost (g + h) for this node.
+    """
+
     def __init__(self, x, y):
+        """
+        Initializes a new Node with the given coordinates.
+
+        Args:
+            x (int): X-coordinate of the node.
+            y (int): Y-coordinate of the node.
+        """
         self.x = x
         self.y = y
         self.parent = None
@@ -10,13 +29,42 @@ class Node:
         self.f = float('inf')
 
     def __lt__(self, other):
+        """
+        Compares two nodes based on their f values.
+
+        Args:
+            other (Node): Another node to compare.
+
+        Returns:
+            bool: True if this node's f value is less than the other node's f value, otherwise False.
+        """
         return self.f < other.f
-    
 
 def manhattan_distance(node1, node2):
+    """
+    Calculates the Manhattan distance between two nodes.
+
+    Args:
+        node1 (Node): The first node.
+        node2 (Node): The second node.
+
+    Returns:
+        int: The Manhattan distance between the two nodes.
+    """
     return abs(node1.x - node2.x) + abs(node1.y - node2.y)
 
 def astar(start, end, obstacles):
+    """
+    Finds the shortest path from the start node to the end node using the A* search algorithm.
+
+    Args:
+        start (tuple): The starting coordinates (x, y).
+        end (tuple): The destination coordinates (x, y).
+        obstacles (set): A set of obstacle coordinates (x, y).
+
+    Returns:
+        list or None: A list of coordinates representing the shortest path from start to end, or None if no path is found.
+    """
     open_set = []  
     closed_set = set()
     start_node = Node(*start)
@@ -57,7 +105,7 @@ def astar(start, end, obstacles):
 
 fire_station = (0, 0)
 destination = (3, 3)
-obstacles = {(2, 2)}
+obstacles = {(2, 2), (1, 2)}
 
 path = astar(fire_station, destination, obstacles)
 

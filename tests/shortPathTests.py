@@ -1,6 +1,6 @@
 import unittest
 
-from shortPath import astar
+from navigation.shortPath import astar
 
 class TestAstar(unittest.TestCase):
     def test_valid_path(self):
