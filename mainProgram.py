@@ -64,7 +64,7 @@ def compute_shortest_path(coordinates):
         added=(astar(start, end, obstacles))
         for element in added:
             paths.append(element)
-        start = paths[-1]
+        start = paths[-2]
         # if i == 0:
         #     start = FIRE_STATION
         #     end = coordinates[i]
