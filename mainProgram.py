@@ -7,6 +7,7 @@ INVALID_COORDINATE_INPUT_MSG = "Invalid input. Enter coordinates between 0 and 3
 INVALID_FIRE_TYPE_INPUT_MSG = f"Invalid input. Enter one of the following fire types: {FIRE_TYPES}"
 
 # ADD STATUSES TO DISPLAY DURING RUNTIME
+# hola
 
 def start():
     init_robot()    # Complete this function
@@ -40,6 +41,7 @@ def start():
 
     fire_colors = get_fire_colors(fire_types)   # the list of fire colors e.g. [blue, green, orange]
     paths = compute_shortest_path(coordinates)  # list of the 4 paths from start to finish
+    print(paths)
 
 
 def init_robot():
@@ -48,24 +50,23 @@ def init_robot():
 
 def compute_shortest_path(coordinates):
     paths = []
+    start = FIRE_STATION
+    end = coordinates[i]
+    obstacles = [coordinates[i + 1], coordinates[i + 2]]
 
-    for i in range(4):
-        if i == 0:
-            start = FIRE_STATION
-            end = coordinates[i]
-            obstacles = [coordinates[i + 1], coordinates[i + 2]]
-        elif i == 1:
+    for i in range(NUMBER_OF_FIRES + 1):
+        if i == 1:  # fire 1 to fire 2, obstacles = fire 3
             start = coordinates[i - 1]
             end = coordinates[i]
             obstacles = [coordinates[i + 1]]
-        elif i == 2:
+        elif i == 2: # fire 2 to fire 3, obstacles = fire 1
             start = coordinates[i - 1]
             end = coordinates[i]
             obstacles = [coordinates[i - 2]]
-        elif i == 3:
+        elif i == 3: # fire 3 to station, obstacles = fire 1, fire 2
             start = coordinates[i - 1]
             end = FIRE_STATION
-            obstacles = [coordinates[i - 3], coordinates[i - 2], coordinates[i - 1]]
+            obstacles = [coordinates[i - 3], coordinates[i - 2]]
         paths.append(astar(start, end, obstacles))
     
     return paths
@@ -99,3 +100,4 @@ def validate_fire_type(fire_type):
         return False
     return True
 
+start()
