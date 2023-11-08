@@ -50,6 +50,7 @@ def init_robot():
 
 def compute_shortest_path(coordinates):
     paths = []
+    short-path
     start=FIRE_STATION
     for i in range(len(coordinates)+1):
         if(i == (len(coordinates))):
@@ -65,23 +66,6 @@ def compute_shortest_path(coordinates):
         for element in added:
             paths.append(element)
         start = paths[-2]
-        # if i == 0:
-        #     start = FIRE_STATION
-        #     end = coordinates[i]
-        #     obstacles = [coordinates[i + 1], coordinates[i + 2]]
-        # elif i == 1:
-        #     start = coordinates[i - 1]
-        #     end = coordinates[i]
-        #     obstacles = [coordinates[i - 1], coordinates[i + 1]]
-        # elif i == 2:
-        #     start = coordinates[i - 1]
-        #     end = coordinates[i]
-        #     obstacles = [coordinates[i - 2], coordinates[i - 1]]
-        # elif i == 3:
-        #     start = coordinates[i - 1]
-        #     end = FIRE_STATION
-        #     obstacles = [coordinates[i - 3], coordinates[i - 2], coordinates[i - 1]]
-        # paths.append(astar(start, end, obstacles))
     
     return paths
 
