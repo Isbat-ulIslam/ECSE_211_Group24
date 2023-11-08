@@ -50,33 +50,24 @@ def init_robot():
 
 def compute_shortest_path(coordinates):
     paths = []
-    start=FIRE_STATION
-    for i in range(len(coordinates)+1):
-        end= coordinates[i]
-        obstacles= []
-        for j in range(len(coordinates)):
-            temp= coordinates[j]
-            if not(temp==end) and not (temp==start):
-                obstacles.append(temp)
+    start = FIRE_STATION
+    end = coordinates[i]
+    obstacles = [coordinates[i + 1], coordinates[i + 2]]
+
+    for i in range(NUMBER_OF_FIRES + 1):
+        if i == 1:  # fire 1 to fire 2, obstacles = fire 3
+            start = coordinates[i - 1]
+            end = coordinates[i]
+            obstacles = [coordinates[i + 1]]
+        elif i == 2: # fire 2 to fire 3, obstacles = fire 1
+            start = coordinates[i - 1]
+            end = coordinates[i]
+            obstacles = [coordinates[i - 2]]
+        elif i == 3: # fire 3 to station, obstacles = fire 1, fire 2
+            start = coordinates[i - 1]
+            end = FIRE_STATION
+            obstacles = [coordinates[i - 3], coordinates[i - 2]]
         paths.append(astar(start, end, obstacles))
-        start = paths[-1]
-        # if i == 0:
-        #     start = FIRE_STATION
-        #     end = coordinates[i]
-        #     obstacles = [coordinates[i + 1], coordinates[i + 2]]
-        # elif i == 1:
-        #     start = coordinates[i - 1]
-        #     end = coordinates[i]
-        #     obstacles = [coordinates[i - 1], coordinates[i + 1]]
-        # elif i == 2:
-        #     start = coordinates[i - 1]
-        #     end = coordinates[i]
-        #     obstacles = [coordinates[i - 2], coordinates[i - 1]]
-        # elif i == 3:
-        #     start = coordinates[i - 1]
-        #     end = FIRE_STATION
-        #     obstacles = [coordinates[i - 3], coordinates[i - 2], coordinates[i - 1]]
-        # paths.append(astar(start, end, obstacles))
     
     return paths
 
