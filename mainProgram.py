@@ -1,10 +1,8 @@
 from navigation.shortPath import astar
-from math import sqrt
 from utils.brick import EV3ColorSensor, wait_ready_sensors, Motor, TouchSensor
 from drop_block import *
 from color_detection import color_detect_func
 
-print("hello")
 
 LEFT_MOTOR = Motor("C")
 RIGHT_MOTOR = Motor("B")
@@ -14,73 +12,50 @@ TOUCH_SENSOR = TouchSensor(1)
 last_seen=""
 
 fire=0
-NUMBER_OF_FIRES = 3;
 FIRE_STATION = (0, 0)
-FIRE_TYPES = ['A', 'B', 'C', 'D', 'E', 'F']
-INVALID_COORDINATE_INPUT_MSG = "Invalid input. Enter coordinates between 0 and 3."
-INVALID_FIRE_TYPE_INPUT_MSG = f"Invalid input. Enter one of the following fire types: {FIRE_TYPES}"
 
 # ADD STATUSES TO DISPLAY DURING RUNTIME
 status = ""
-orientation= ""
-curr_pos= 0
+orientation = ""
+curr_pos = 0
+
 def start():
-    print("start")
     init_robot()
     LEFT_MOTOR.set_power(0)
-    RIGHT_MOTOR.set_power(0)   # Complete this function
+    RIGHT_MOTOR.set_power(0)
 
     coordinates = []
     fire_types = []
     counter = 1
 
     print("Welcome to the Robot Firefighter Program!\n")
+    
+    user_input = input("Enter the coordinates and types of fire:");
+    fire_input = user_input.split(",")
+    coordinates.append((int(fire_input[0]), int(fire_input[1])))
+    coordinates.append((int(fire_input[3]), int(fire_input[4])))
+    coordinates.append((int(fire_input[6]), int(fire_input[7])))
+    
+    fire_types.append(fire_input[2])
+    fire_types.append(fire_input[5])
+    fire_types.append(fire_input[8])
 
-    while True:
-        if (counter == 4):
-            break
+    paths = compute_shortest_path(coordinates)
 
-        x = int(input(f"Enter x-coordinate for fire {counter}: "))
-        y = int(input(f"Enter y-coordinate for fire {counter}: "))
-
-        if (not validate_coordinate (x) or not validate_coordinate(y)):
-            print(INVALID_COORDINATE_INPUT_MSG)
-            continue
-        
-        fire_type = input(f"Enter fire type for fire {counter}: ")
-        if (not validate_fire_type(fire_type)):
-            print(INVALID_FIRE_TYPE_INPUT_MSG)
-            continue
-
-        coordinates.append((x, y))
-        fire_types.append(fire_type)
-        counter += 1
-        print()
-
-    #fire_colors = get_fire_colors(fire_types)   # the list of fire colors e.g. [blue, green, orange]
-    paths = compute_shortest_path(coordinates)  # list of the 4 paths from start to finish
-    print(paths)
     global curr_pos, fire
     while(curr_pos<len(paths)-1):
         print(paths[curr_pos])
-#         left_color = color_detect_func(LEFT_COLOR_SENSOR)
-#         right_color = color_detect_func(RIGHT_COLOR_SENSOR)
-#         drive()
-        print("I visited a place")
         global orientation
         correct_orientation(paths)
-        status= "Drive"
         LEFT_MOTOR.set_power(10)
         RIGHT_MOTOR.set_power(10)
         time.sleep(0.5)
         drive()
-        print("Done")
         
         # if we encounter fire coordinates, then go backwards
         # then stop, drop the block, and go backwards to prev. coordinate
         if(paths[curr_pos + 1] in coordinates):
             print("FIRE NUMBER")
-            fire+=1
             color=fire_types[fire]
             LEFT_MOTOR.set_power(-20)
             RIGHT_MOTOR.set_power(-20)
@@ -93,21 +68,12 @@ def start():
             LEFT_MOTOR.set_power(10)
             RIGHT_MOTOR.set_power(10)
             time.sleep(0.5)
-            #drive()
-            #skip_green()
-            correct_orientation(paths)
-            # go backwards to prev. coordinates
-#             drive_back()
-#             skip_green_back()
-#             # update current position to previous coordinates 
-#             curr_pos+=1
-#             correct_orientation(paths)
-            
-            
+            fire += 1
+            correct_orientation(paths) 
         else:
             print("NOT FIRE")
-            # forward
             skip_green()
+            
         curr_pos+=1
         
 
@@ -185,8 +151,11 @@ def turn_left():
     return "done"
 
 def turn_back():
-    turn_right()
-    turn_right()
+    RIGHT_MOTOR.set_power(-23)
+    LEFT_MOTOR.set_power(23)
+    time.sleep(2.2)
+    RIGHT_MOTOR.set_power(0)
+    LEFT_MOTOR.set_power(0)
     return "done"
     
 def compute_shortest_path(coordinates):
@@ -212,34 +181,6 @@ def compute_shortest_path(coordinates):
     
     return paths
 
-def get_fire_colors(fire_types):
-    fire_colors = []
-
-    for fire in fire_types:
-        if fire == 'A':
-            fire_colors.append('blue')
-        elif fire == 'B':
-            fire_colors.append('yellow')
-        elif fire == 'C':
-            fire_colors.append('purple')
-        elif fire == 'D':
-            fire_colors.append('red')
-        elif fire == 'E':
-            fire_colors.append('orange')
-        elif fire == 'F':
-            fire_colors.append('green')
-    
-    return fire_colors
-
-def validate_coordinate(x):
-    if x > 3 or x < 0:
-        return False
-    return True
-
-def validate_fire_type(fire_type):
-    if fire_type not in FIRE_TYPES:
-        return False
-    return True
 def drive():
     greenCount = 0
     
@@ -255,8 +196,6 @@ def drive():
         
         left_color = color_detect_func(LEFT_COLOR_SENSOR)
         right_color = color_detect_func(RIGHT_COLOR_SENSOR)
-        
-#         print(left_color + " " + right_color)
     
         if (left_color == "table" and right_color == "table"):
             if (last_seen!="TABLE"):

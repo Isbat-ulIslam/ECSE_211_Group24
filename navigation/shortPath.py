@@ -101,4 +101,4 @@ def astar(start, end, obstacles):
                     neighbor.f = neighbor.g + neighbor.h
                     heapq.heappush(open_set, neighbor)
 
-    return None
+    raise Exception("No path found");
