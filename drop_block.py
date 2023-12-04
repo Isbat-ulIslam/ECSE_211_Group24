@@ -5,15 +5,15 @@ import math
 LEVER_MOTOR = Motor("A")
 PLATFORM_ROTATION_MOTOR = Motor("D")
 # Rotation limits are pre-set so that robots don't rotate too quick.
-LEVER_MOTOR.set_limits(80)
-PLATFORM_ROTATION_MOTOR.set_limits(5)
+LEVER_MOTOR.set_limits(50)
+PLATFORM_ROTATION_MOTOR.set_limits(10)
 MOTOR_WAIT = 0.1
 # Dictionary ordering colours, COld Colours --> Warm Colours. Keys = Colors, Values = Approximate Degrees
-COLORS_ON_PLATFORM = {"C": 0, "A": -50, "F": -135, "B": -180, "E": 135, "D": 50}
+COLORS_ON_PLATFORM = {"C": 0, "A": 50, "F": 130, "B": -180, "E": -130, "D": -50}
 #                     purple     blue   green    yellow        orange     red
 # Rotates platform.
 def rotate_platform(degrees):
-        PLATFORM_ROTATION_MOTOR.set_position(degrees)
+        PLATFORM_ROTATION_MOTOR.set_position_relative(degrees)
         wait_sleep_movement(PLATFORM_ROTATION_MOTOR)
         
 # Activates lever to kick cube and brings it back.
@@ -39,6 +39,5 @@ def drop_color(color):
     print("platform rotated")
     kick_lever()
     if degrees!=0:
-        rotate_platform(-1*degrees)
-    
+        rotate_platform(-1*degrees) #-1*degrees
 
