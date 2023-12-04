@@ -153,7 +153,7 @@ def turn_left():
 def turn_back():
     RIGHT_MOTOR.set_power(-23)
     LEFT_MOTOR.set_power(23)
-    time.sleep(2.2)
+    time.sleep(2.2)             
     RIGHT_MOTOR.set_power(0)
     LEFT_MOTOR.set_power(0)
     return "done"
@@ -221,7 +221,7 @@ def drive():
         if right_color == "green" and left_color != "green":
             RIGHT_MOTOR.set_power(0)
             LEFT_MOTOR.set_power(10)
-        
+    
         
         if (left_color == "red" or left_color == "blue") and right_color == "table":
             LEFT_MOTOR.set_power(0)
@@ -235,3 +235,6 @@ def drive():
             RIGHT_MOTOR.set_power(20)
 start()
 reset_brick()
+
+
+
